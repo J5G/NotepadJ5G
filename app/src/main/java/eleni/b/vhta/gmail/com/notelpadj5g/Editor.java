@@ -9,5 +9,6 @@ public class Editor extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
+        //this is just a test
     }
 }
