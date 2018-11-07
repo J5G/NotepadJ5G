@@ -14,6 +14,8 @@ public class View_Notes extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view__notes);
 
+        Database db = new Database(this);
+
         FloatingActionButton newNote= findViewById(R.id.NewNote);
         newNote.setOnClickListener(new View.OnClickListener() {
             @Override
