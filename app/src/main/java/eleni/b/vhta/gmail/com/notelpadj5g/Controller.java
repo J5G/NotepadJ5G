@@ -1,47 +1,46 @@
 package eleni.b.vhta.gmail.com.notelpadj5g;
 
+import android.net.Uri;
+
 import java.sql.Blob;
 import java.util.Date;
 
 public class Controller
 {
-    public static final String tableName1 = "NOTES";
-    public static final String columnID = "ID_NOTES";
+    public static final String tableName = "NOTES";
+    public static final String columnId = "ID";
     public static final String columnText = "TEXT";
     public static final String columnTitle = "TITLE";
-    public static final String columnDate = "DATE";
+    public static final String columnDate = "TIMESTAMP";
     public static final String columnCoordinates = "COORDINATES";
-    public static final String columnRecord = "RECORD";
     public static final String columnBold = "BOLD";
     public static final String columnItalics = "ITALICS";
     public static final String columnUnderline = "UNDERLINE";
     public static final String columnPhotograph = "PHOTOGRAPH";
+    public static final String columnRecord = "RECORD";
 
-    // Create Table Notes SQL query
-    public static final String createNotesTable = "CREATE TABLE " + tableName1 + "(" + columnID +" INT IDENTITY(1,1), "+ columnTitle +" VARCHAR(60) NOT NULL, "+columnText+" TEXT NULL, "+columnDate+" DATE NOT NULL, "+columnCoordinates+" TEXT NULL, "+columnRecord + " BLOB NULL, "+ columnPhotograph + " BLOB NULL, " + columnBold + " INT NULL, " + columnItalics + " INT NULL, " +columnUnderline + " INT NULL, CONSTRAINT PK_NOTES PRIMARY KEY (ID_NOTES))";
+    public static final String createTable="CREATE TABLE NOTES ( ID INTEGER PRIMARY KEY AUTOINCREMENT, TITLE TEXT, TEXT TEXT, TIMESTAMP DATETIME DEFAULT CURRENT_TIMESTAMP, COORDINATES TEXT, BOLD INT, ITALICS INT, UNDERLINE INT, RECORD BLOB, PHOTOGRAPH BLOB )";
 
     private int notesID;
     private String title;
     private String note;
-    private Date date;
     private String coordinates;
     private Blob record;
     private int bold;
     private int italics;
     private int underline;
-    private Blob photograph;
+    private Uri photograph;
 
     public Controller()
     {
 
     }
 
-    public Controller(int notesID, String title, String note, Date date, String coordinates, Blob record, int bold, int italics, int underline, Blob photograph)
+    public Controller(int id, String title, String note, String coordinates, Blob record, int bold, int italics, int underline, Uri photograph)
     {
-        this.notesID = notesID;
+        this.notesID = id;
         this.title = title;
         this.note = note;
-        this.date = date;
         this.coordinates = coordinates;
         this.record = record;
         this.bold = bold;
@@ -80,15 +79,6 @@ public class Controller
         this.note = note;
     }
 
-    public Date getDate()
-    {
-        return date;
-    }
-
-    public void setDate(Date date)
-    {
-        this.date = date;
-    }
 
     public String getCoordinates()
     {
@@ -140,12 +130,12 @@ public class Controller
         this.underline = underline;
     }
 
-    public Blob getPhotograph()
+    public Uri getPhotograph()
     {
         return photograph;
     }
 
-    public void setPhotograph(Blob photograph)
+    public void setPhotograph(Uri photograph)
     {
         this.photograph = photograph;
     }
