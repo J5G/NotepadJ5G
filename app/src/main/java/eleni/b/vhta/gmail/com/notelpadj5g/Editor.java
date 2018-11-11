@@ -9,6 +9,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -39,10 +40,21 @@ public class Editor extends AppCompatActivity {
         final CheckBox CheckBoxItalics = findViewById(R.id.CheckBoxItalics);
         final CheckBox CheckBoxUnderline = findViewById(R.id.CheckBoxUnderline);
         final EditText EditorTextBox = findViewById(R.id.EditorTextBox);
+        final FloatingActionButton ButtonSave= findViewById(R.id.ButtonSave);
         final Controller cntlr = new Controller();
+        final Database db= new Database(this);
 
         imgPicture = (ImageView) findViewById(R.id.imageView2);
 
+
+        ButtonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long id = db.insertNote(cntlr.getTitle(),EditorTextBox.getText().toString(),cntlr.getCoordinates(),cntlr.getBold(),cntlr.getItalics(),cntlr.getUnderline(),null,null);
+                System.out.println(id);
+                cntlr.setNote(EditorTextBox.getText().toString());
+            }
+        });
 
         CheckBoxBold.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -104,7 +116,7 @@ public class Editor extends AppCompatActivity {
         }
 
         @Override
-        protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
+        public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
         {
             if(resultCode==RESULT_OK)
             {
