@@ -1,5 +1,6 @@
 package eleni.b.vhta.gmail.com.notelpadj5g;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,8 +11,10 @@ import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -24,11 +27,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-public class Editor extends AppCompatActivity {
+public class Editor extends AppCompatActivity implements Dialog.DialogListener {
 
     public static final int REQUEST_CODE = 20;
     public static final int IMAGE_GALLERY_REQUEST = REQUEST_CODE;
     private ImageView imgPicture;
+    final Controller cntlr = new Controller();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +40,14 @@ public class Editor extends AppCompatActivity {
         setContentView(R.layout.activity_editor);
 
 
+
         final CheckBox CheckBoxBold = findViewById(R.id.CheckBoxBold);
         final CheckBox CheckBoxItalics = findViewById(R.id.CheckBoxItalics);
         final CheckBox CheckBoxUnderline = findViewById(R.id.CheckBoxUnderline);
         final EditText EditorTextBox = findViewById(R.id.EditorTextBox);
         final FloatingActionButton ButtonSave= findViewById(R.id.ButtonSave);
-        final Controller cntlr = new Controller();
         final Database db= new Database(this);
+
 
         imgPicture = (ImageView) findViewById(R.id.imageView2);
 
@@ -50,9 +55,12 @@ public class Editor extends AppCompatActivity {
         ButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                long id = db.insertNote(cntlr.getTitle(),EditorTextBox.getText().toString(),cntlr.getCoordinates(),cntlr.getBold(),cntlr.getItalics(),cntlr.getUnderline(),null,null);
+
+                OpenDialog();
+                long id = db.insertNote(cntlr.getTitle(), EditorTextBox.getText().toString(), cntlr.getCoordinates(), cntlr.getBold(), cntlr.getItalics(), cntlr.getUnderline(), null, null);
                 System.out.println(id);
                 cntlr.setNote(EditorTextBox.getText().toString());
+
             }
         });
 
@@ -94,6 +102,14 @@ public class Editor extends AppCompatActivity {
             }
         });
         }
+
+        public void OpenDialog()
+        {
+            Dialog dialog = new Dialog();
+            dialog.show(getSupportFragmentManager(), "dialog");
+
+        }
+
         /**
          * Invoke onImageGalleryClick when user clicks button Images
          * @param v
@@ -146,5 +162,13 @@ public class Editor extends AppCompatActivity {
             }
 
 
+    }
+
+    @Override
+    public void applyText(String title) {
+        cntlr.setTitle(title);
+        // testing for giving title
+        // it works
+        System.out.println(title);
     }
 }

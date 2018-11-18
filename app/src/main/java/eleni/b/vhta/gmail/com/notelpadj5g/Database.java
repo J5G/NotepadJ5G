@@ -1,5 +1,6 @@
 package eleni.b.vhta.gmail.com.notelpadj5g;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -34,7 +35,6 @@ public class Database extends SQLiteOpenHelper
         onCreate(db);
     }
 
-
     public long insertNote(String title, String text, String coordinates, int bold, int italics, int underline, Blob record, Blob phoograph){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -50,8 +50,9 @@ public class Database extends SQLiteOpenHelper
         // or -1 if an error occurred
 
         long notesID = db.insert(Controller.tableName,null,values);
+        // testing:
         System.out.println(notesID);
-
+        db.close();
         return notesID;
     }
 
@@ -62,4 +63,7 @@ public class Database extends SQLiteOpenHelper
         return db.update(Controller.tableName,values,Controller.columnId + " =? ", new String[]{
                 String.valueOf(note.getNotesID())});
     }
+
+
+
 }
