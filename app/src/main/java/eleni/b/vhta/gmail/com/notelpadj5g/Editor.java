@@ -14,14 +14,19 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -32,6 +37,8 @@ public class Editor extends AppCompatActivity implements Dialog.DialogListener {
     public static final int REQUEST_CODE = 20;
     public static final int IMAGE_GALLERY_REQUEST = REQUEST_CODE;
     private ImageView imgPicture;
+    private static final String TAG ="Editor";
+    private static final int ERROR_DIALOG_REQUEST=9001;
     final Controller cntlr = new Controller();
 
     @Override
@@ -46,6 +53,7 @@ public class Editor extends AppCompatActivity implements Dialog.DialogListener {
         final CheckBox CheckBoxUnderline = findViewById(R.id.CheckBoxUnderline);
         final EditText EditorTextBox = findViewById(R.id.EditorTextBox);
         final FloatingActionButton ButtonSave= findViewById(R.id.ButtonSave);
+        final Button ButtonCoordinates = findViewById(R.id.ButtonCoordinates);
         final Database db= new Database(this);
 
 
@@ -98,6 +106,16 @@ public class Editor extends AppCompatActivity implements Dialog.DialogListener {
                 } else {
                     EditorTextBox.setPaintFlags(Paint.LINEAR_TEXT_FLAG);
                     cntlr.setUnderline(0);
+                }
+            }
+        });
+        ButtonCoordinates.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(servicesVersionCorrect())
+                {
+                    Intent intent = new Intent(Editor.this, Map.class);
+                    startActivity(intent);
                 }
             }
         });
@@ -170,5 +188,28 @@ public class Editor extends AppCompatActivity implements Dialog.DialogListener {
         // testing for giving title
         // it works
         System.out.println(title);
+    }
+
+    //Συνάρτηση που ελέγχει αν το κινητό έχει την απαραίτητη έκδοση της υπηρεσίας Google Services
+    public boolean servicesVersionCorrect()
+    {
+        Log.d(TAG,"servicesVersionCorrect: checking google services version");
+        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(Editor.this);
+        if(available == ConnectionResult.SUCCESS)
+        {
+            Log.d(TAG,"servicesVersionCorrect: Google Play Services is working");
+            return true;
+        }
+        else if(GoogleApiAvailability.getInstance().isUserResolvableError(available))
+        {
+            Log.d(TAG,"servicesVersionCorrect: An error occured be it can be solved");
+            android.app.Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(Editor.this, available, ERROR_DIALOG_REQUEST);
+            dialog.show();
+        }
+        else
+        {
+            Toast.makeText(this,"we cannot make map requests",Toast.LENGTH_SHORT).show();
+        }
+        return false;
     }
 }
