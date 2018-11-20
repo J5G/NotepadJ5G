@@ -3,10 +3,13 @@ package eleni.b.vhta.gmail.com.notelpadj5g;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.sql.Blob;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Database extends SQLiteOpenHelper
 {
@@ -64,6 +67,19 @@ public class Database extends SQLiteOpenHelper
                 String.valueOf(note.getNotesID())});
     }
 
+    public Cursor getNotes(SQLiteDatabase db)
+    {
+        String[] projections = {Controller.columnId, Controller.columnTitle, Controller.columnText, Controller.columnDate, Controller.columnCoordinates, Controller.columnBold,Controller.columnItalics, Controller.columnUnderline};
+        Cursor cursor = db.query(Controller.tableName,projections,null,null,null,null,null);
 
+        return cursor;
+    }
 
+    public void deleteNote(Controller note) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(Controller.tableName, Controller.columnId + " = ?",
+                new String[]{String.valueOf(note.getNotesID())});
+        db.close();
+    }
 }
+

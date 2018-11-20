@@ -36,17 +36,16 @@ public class Controller
 
     }
 
-    public Controller(int id, String title, String note, String coordinates, Blob record, int bold, int italics, int underline, Uri photograph)
+    public Controller(int id, String title, String note, String coordinates, int bold, int italics, int underline)
     {
+
         this.notesID = id;
         this.title = title;
         this.note = note;
         this.coordinates = coordinates;
-        this.record = record;
         this.bold = bold;
         this.italics = italics;
         this.underline = underline;
-        this.photograph = photograph;
     }
 
     public int getNotesID()

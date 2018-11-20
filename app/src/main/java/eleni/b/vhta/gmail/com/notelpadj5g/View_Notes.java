@@ -15,6 +15,9 @@ public class View_Notes extends AppCompatActivity {
         setContentView(R.layout.activity_view__notes);
 
         Database db = new Database(this);
+        BackGroundTask bgtask = new BackGroundTask(this);
+
+        bgtask.execute("get_notes");
 
         FloatingActionButton newNote= findViewById(R.id.NewNote);
         newNote.setOnClickListener(new View.OnClickListener() {
