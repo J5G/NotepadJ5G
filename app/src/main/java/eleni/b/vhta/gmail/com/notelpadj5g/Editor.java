@@ -76,23 +76,16 @@ public class Editor extends AppCompatActivity implements Dialog.DialogListener {
             @Override
             public void onClick(View v) {
 
-                String imgPictureString = imageViewEncodeToString(imgPicture);
+
                 OpenDialog();
                 long id = db.insertNote(cntlr.getTitle(), EditorTextBox.getText().toString(), cntlr.getCoordinates(), cntlr.getBold(), cntlr.getItalics(), cntlr.getUnderline(), null, cntlr.getPhotograph());
                 System.out.println(id);
                 cntlr.setNote(EditorTextBox.getText().toString());
-                cntlr.setPhotograph(imgPictureString);
+
 
             }
 
-            private String imageViewEncodeToString(ImageView image)
-            {
-                Bitmap bitmapImage2 = ((BitmapDrawable)image.getDrawable()).getBitmap();
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmapImage2.compress(Bitmap.CompressFormat.PNG,50,stream);
-                byte[] byteArray = stream.toByteArray();
-                return Base64.encodeToString(byteArray, Base64.URL_SAFE);
-            }
+
         });
 
         CheckBoxBold.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -202,6 +195,8 @@ public class Editor extends AppCompatActivity implements Dialog.DialogListener {
                         Bitmap bitmapImage = BitmapFactory.decodeStream(inputStream);
                         // Show image to the user
                         imgPicture.setImageBitmap(bitmapImage);
+                        String imgPictureString = imageViewEncodeToString(imgPicture);
+                        cntlr.setPhotograph(imgPictureString);
 
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
@@ -210,8 +205,15 @@ public class Editor extends AppCompatActivity implements Dialog.DialogListener {
                     }
                 }
             }
+        }
 
-
+    private String imageViewEncodeToString(ImageView image)
+    {
+        Bitmap bitmapImage2 = ((BitmapDrawable)image.getDrawable()).getBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmapImage2.compress(Bitmap.CompressFormat.PNG,50,stream);
+        byte[] byteArray = stream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.URL_SAFE);
     }
 
     @Override

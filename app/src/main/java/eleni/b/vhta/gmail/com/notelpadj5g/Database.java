@@ -5,6 +5,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 
 import java.sql.Blob;
 
@@ -65,6 +68,12 @@ public class Database extends SQLiteOpenHelper
                 String.valueOf(note.getNotesID())});
     }
 
+    private Bitmap getBitmapFromEncodedString(String encodedString){
 
+        byte[] arrimg = Base64.decode(encodedString, Base64.URL_SAFE);
+        Bitmap img = BitmapFactory.decodeByteArray(arrimg, 0, arrimg.length);
+        return img;
+
+    }
 
 }
