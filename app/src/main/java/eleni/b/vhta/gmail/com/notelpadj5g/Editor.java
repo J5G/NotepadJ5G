@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,15 +30,19 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.util.Calendar;
 
 public class Editor extends AppCompatActivity implements Dialog.DialogListener {
 
     public static final int REQUEST_CODE = 20;
     public static final int IMAGE_GALLERY_REQUEST = REQUEST_CODE;
     private ImageView imgPicture;
+    private TextView dateTimeView;
     private static final String TAG ="Editor";
     private static final int ERROR_DIALOG_REQUEST=9001;
     final Controller cntlr = new Controller();
@@ -59,16 +65,32 @@ public class Editor extends AppCompatActivity implements Dialog.DialogListener {
 
         imgPicture = (ImageView) findViewById(R.id.imageView2);
 
+        dateTimeView = (TextView) findViewById(R.id.textViewDate);
+        Calendar calendar = Calendar.getInstance();
+        String currentDate = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
+        dateTimeView.setText(currentDate);
+
 
         ButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                String imgPictureString = imageViewEncodeToString(imgPicture);
                 OpenDialog();
-                long id = db.insertNote(cntlr.getTitle(), EditorTextBox.getText().toString(), cntlr.getCoordinates(), cntlr.getBold(), cntlr.getItalics(), cntlr.getUnderline(), null, null);
+                long id = db.insertNote(cntlr.getTitle(), EditorTextBox.getText().toString(), cntlr.getCoordinates(), cntlr.getBold(), cntlr.getItalics(), cntlr.getUnderline(), null, cntlr.getPhotograph());
                 System.out.println(id);
                 cntlr.setNote(EditorTextBox.getText().toString());
+                cntlr.setPhotograph(imgPictureString);
 
+            }
+
+            private String imageViewEncodeToString(ImageView image)
+            {
+                Bitmap bitmapImage2 = ((BitmapDrawable)image.getDrawable()).getBitmap();
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmapImage2.compress(Bitmap.CompressFormat.PNG,50,stream);
+                byte[] byteArray = stream.toByteArray();
+                return Base64.encodeToString(byteArray, Base64.URL_SAFE);
             }
         });
 

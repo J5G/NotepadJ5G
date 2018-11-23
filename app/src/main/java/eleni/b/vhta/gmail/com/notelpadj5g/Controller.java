@@ -19,7 +19,7 @@ public class Controller
     public static final String columnPhotograph = "PHOTOGRAPH";
     public static final String columnRecord = "RECORD";
 
-    public static final String createTable="CREATE TABLE NOTES ( ID INTEGER PRIMARY KEY AUTOINCREMENT, TITLE TEXT, TEXT TEXT, TIMESTAMP DATETIME DEFAULT CURRENT_TIMESTAMP, COORDINATES TEXT, BOLD INT, ITALICS INT, UNDERLINE INT, RECORD BLOB, PHOTOGRAPH BLOB )";
+    public static final String createTable="CREATE TABLE NOTES ( ID INTEGER PRIMARY KEY AUTOINCREMENT, TITLE TEXT, TEXT TEXT, TIMESTAMP DATETIME DEFAULT CURRENT_TIMESTAMP, COORDINATES TEXT, BOLD INT, ITALICS INT, UNDERLINE INT, RECORD BLOB, PHOTOGRAPH TEXT )";
 
     private int notesID;
     private String title;
@@ -29,14 +29,14 @@ public class Controller
     private int bold;
     private int italics;
     private int underline;
-    private Uri photograph;
+    private String photograph;
 
     public Controller()
     {
 
     }
 
-    public Controller(int id, String title, String note, String coordinates, Blob record, int bold, int italics, int underline, Uri photograph)
+    public Controller(int id, String title, String note, String coordinates, Blob record, int bold, int italics, int underline, String photograph)
     {
         this.notesID = id;
         this.title = title;
@@ -130,12 +130,12 @@ public class Controller
         this.underline = underline;
     }
 
-    public Uri getPhotograph()
+    public String getPhotograph()
     {
         return photograph;
     }
 
-    public void setPhotograph(Uri photograph)
+    public void setPhotograph(String photograph)
     {
         this.photograph = photograph;
     }

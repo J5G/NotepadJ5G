@@ -35,7 +35,7 @@ public class Database extends SQLiteOpenHelper
         onCreate(db);
     }
 
-    public long insertNote(String title, String text, String coordinates, int bold, int italics, int underline, Blob record, Blob phoograph){
+    public long insertNote(String title, String text, String coordinates, int bold, int italics, int underline, Blob record, String photograph){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
@@ -45,6 +45,7 @@ public class Database extends SQLiteOpenHelper
         values.put(Controller.columnBold, bold);
         values.put(Controller.columnItalics, italics);
         values.put(Controller.columnUnderline, underline);
+        values.put(Controller.columnPhotograph, photograph);
 
         // the db.insert(.... returns the row ID of the newly inserted row
         // or -1 if an error occurred
