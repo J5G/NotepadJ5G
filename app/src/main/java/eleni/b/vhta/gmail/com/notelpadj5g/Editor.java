@@ -60,6 +60,7 @@ public class Editor extends AppCompatActivity implements Dialog.DialogListener {
         final EditText EditorTextBox = findViewById(R.id.EditorTextBox);
         final FloatingActionButton ButtonSave= findViewById(R.id.ButtonSave);
         final Button ButtonCoordinates = findViewById(R.id.ButtonCoordinates);
+        FloatingActionButton ButtonBack= findViewById(R.id.ButtonBack);
         final Database db= new Database(this);
 
 
@@ -139,6 +140,15 @@ public class Editor extends AppCompatActivity implements Dialog.DialogListener {
                     Intent intent = new Intent(Editor.this, Map.class);
                     startActivity(intent);
                 }
+            }
+        });
+        ButtonBack.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent=new Intent(v.getContext(),View_Notes.class);
+                startActivityForResult(intent,0);
             }
         });
         }
