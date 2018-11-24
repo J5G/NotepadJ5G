@@ -3,6 +3,7 @@ package eleni.b.vhta.gmail.com.notelpadj5g;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -63,6 +64,13 @@ public class Database extends SQLiteOpenHelper
         values.put(Controller.columnText, note.getNote());
         return db.update(Controller.tableName,values,Controller.columnId + " =? ", new String[]{
                 String.valueOf(note.getNotesID())});
+    }
+
+    public Cursor viewData(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM NOTES";
+        Cursor cursor= db.rawQuery(query,null);
+        return cursor;
     }
 
 

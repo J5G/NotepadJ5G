@@ -62,6 +62,7 @@ public class Editor extends AppCompatActivity implements Dialog.DialogListener {
         final Button ButtonCoordinates = findViewById(R.id.ButtonCoordinates);
         FloatingActionButton ButtonBack= findViewById(R.id.ButtonBack);
         final Database db= new Database(this);
+        final View_Notes vn = new View_Notes();
 
 
         imgPicture = (ImageView) findViewById(R.id.imageView2);
