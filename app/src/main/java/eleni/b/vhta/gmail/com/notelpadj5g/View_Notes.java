@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 import java.util.ArrayList;
 
@@ -26,6 +27,7 @@ public class View_Notes extends AppCompatActivity {
     Database db = new Database(this);
     String item;
     SwipeRefreshLayout swipeRefreshLayout;
+    SearchView searchView;
 
 
     @Override
@@ -36,6 +38,20 @@ public class View_Notes extends AppCompatActivity {
         db = new Database(this);
         listItem = new ArrayList<>();
         list = findViewById(R.id.ListView);
+        searchView= findViewById(R.id.SearchNote);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String text) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
 
         viewData();
 
