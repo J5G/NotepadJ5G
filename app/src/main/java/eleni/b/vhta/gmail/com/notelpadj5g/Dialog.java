@@ -19,7 +19,7 @@ public class Dialog extends AppCompatDialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.layout_dialog,null);
+        View view = inflater.inflate(R.layout.save_dialog,null);
 
         builder.setView(view)
                 .setTitle("Title")
@@ -38,7 +38,7 @@ public class Dialog extends AppCompatDialogFragment {
                     }
                 });
 
-        editTitle = view.findViewById(R.id.editTitle);
+        editTitle = view.findViewById(R.id.title);
 
         return builder.create();
     }
