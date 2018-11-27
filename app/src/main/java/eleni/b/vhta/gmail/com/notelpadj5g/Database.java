@@ -3,15 +3,20 @@ package eleni.b.vhta.gmail.com.notelpadj5g;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.view.ViewDebug;
 
 import java.sql.Blob;
 
 public class Database extends SQLiteOpenHelper
 {
 
-    private static final int databaseVersion = 2;
+    private static final int databaseVersion = 4;
     private static final String databaseName = "Notepad";
 
 
@@ -35,12 +40,13 @@ public class Database extends SQLiteOpenHelper
         onCreate(db);
     }
 
-    public long insertNote(String title, String text, String coordinates, int bold, int italics, int underline, Blob record, String photograph){
+    public long insertNote(String title, String text,String date, String coordinates, int bold, int italics, int underline, Blob record, String photograph){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
         values.put(Controller.columnTitle, title);
         values.put(Controller.columnText, text);
+        values.put(Controller.columnDate,date);
         values.put(Controller.columnCoordinates, coordinates);
         values.put(Controller.columnBold, bold);
         values.put(Controller.columnItalics, italics);
@@ -65,6 +71,29 @@ public class Database extends SQLiteOpenHelper
                 String.valueOf(note.getNotesID())});
     }
 
+    private Bitmap getBitmapFromEncodedString(String encodedString){
 
+        byte[] arrimg = Base64.decode(encodedString, Base64.URL_SAFE);
+        Bitmap img = BitmapFactory.decodeByteArray(arrimg, 0, arrimg.length);
+        return img;
+
+    }
+
+    public void delete(String item)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int position = item.indexOf("-");
+        String date = item.substring(0,position-1);
+        String title = item.substring(position+1 ,item.length());
+        String query = "DELETE FROM NOTES WHERE TITLE LIKE '%"+title+"%' OR DATE LIKE '%"+date+"%'";
+        db.execSQL(query);
+
+    }
+    public Cursor viewData(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT DATE, TITLE FROM NOTES";
+        Cursor cursor= db.rawQuery(query,null);
+        return cursor;
+    }
 
 }

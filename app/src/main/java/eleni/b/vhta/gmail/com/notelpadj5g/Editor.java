@@ -1,7 +1,9 @@
 package eleni.b.vhta.gmail.com.notelpadj5g;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
@@ -15,6 +17,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,7 +40,7 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.util.Calendar;
 
-public class Editor extends AppCompatActivity implements Dialog.DialogListener {
+public class Editor extends AppCompatActivity  {
 
     public static final int REQUEST_CODE = 20;
     public static final int IMAGE_GALLERY_REQUEST = REQUEST_CODE;
@@ -46,6 +49,7 @@ public class Editor extends AppCompatActivity implements Dialog.DialogListener {
     private static final String TAG ="Editor";
     private static final int ERROR_DIALOG_REQUEST=9001;
     final Controller cntlr = new Controller();
+    final Database db= new Database(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +65,7 @@ public class Editor extends AppCompatActivity implements Dialog.DialogListener {
         final FloatingActionButton ButtonSave= findViewById(R.id.ButtonSave);
         final Button ButtonCoordinates = findViewById(R.id.ButtonCoordinates);
         FloatingActionButton ButtonBack= findViewById(R.id.ButtonBack);
-        final Database db= new Database(this);
+
 
 
         imgPicture = (ImageView) findViewById(R.id.imageView2);
@@ -70,18 +74,18 @@ public class Editor extends AppCompatActivity implements Dialog.DialogListener {
         Calendar calendar = Calendar.getInstance();
         String currentDate = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
         dateTimeView.setText(currentDate);
-
+        String dateTime = DateUtils.formatDateTime(this, calendar.getTimeInMillis(), DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_NUMERIC_DATE | DateUtils.FORMAT_SHOW_TIME);
+        cntlr.setDate(dateTime);
 
         ButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 String imgPictureString = imageViewEncodeToString(imgPicture);
-                OpenDialog();
-                long id = db.insertNote(cntlr.getTitle(), EditorTextBox.getText().toString(), cntlr.getCoordinates(), cntlr.getBold(), cntlr.getItalics(), cntlr.getUnderline(), null, cntlr.getPhotograph());
-                System.out.println(id);
                 cntlr.setNote(EditorTextBox.getText().toString());
                 cntlr.setPhotograph(imgPictureString);
+                edit_box();
+
 
             }
 
@@ -153,12 +157,6 @@ public class Editor extends AppCompatActivity implements Dialog.DialogListener {
         });
         }
 
-        public void OpenDialog()
-        {
-            Dialog dialog = new Dialog();
-            dialog.show(getSupportFragmentManager(), "dialog");
-
-        }
 
         /**
          * Invoke onImageGalleryClick when user clicks button Images
@@ -202,6 +200,8 @@ public class Editor extends AppCompatActivity implements Dialog.DialogListener {
                         Bitmap bitmapImage = BitmapFactory.decodeStream(inputStream);
                         // Show image to the user
                         imgPicture.setImageBitmap(bitmapImage);
+                        String imgPictureString = imageViewEncodeToString(imgPicture);
+                        cntlr.setPhotograph(imgPictureString);
 
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
@@ -214,13 +214,15 @@ public class Editor extends AppCompatActivity implements Dialog.DialogListener {
 
     }
 
-    @Override
-    public void applyText(String title) {
-        cntlr.setTitle(title);
-        // testing for giving title
-        // it works
-        System.out.println(title);
+    private String imageViewEncodeToString(ImageView image)
+    {
+        Bitmap bitmapImage2 = ((BitmapDrawable)image.getDrawable()).getBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmapImage2.compress(Bitmap.CompressFormat.PNG,50,stream);
+        byte[] byteArray = stream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.URL_SAFE);
     }
+
 
     //Συνάρτηση που ελέγχει αν το κινητό έχει την απαραίτητη έκδοση της υπηρεσίας Google Services
     public boolean servicesVersionCorrect()
@@ -243,5 +245,31 @@ public class Editor extends AppCompatActivity implements Dialog.DialogListener {
             Toast.makeText(this,"we cannot make map requests",Toast.LENGTH_SHORT).show();
         }
         return false;
+    }
+
+    private void edit_box() {
+        final View saveView = getLayoutInflater().inflate(R.layout.save_dialog, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Set a title for your note");
+        builder.setView(saveView);
+
+        builder.setNeutralButton("Save", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                EditText editTitle = (EditText)saveView.findViewById(R.id.title);
+                String title = editTitle.getText().toString();
+                cntlr.setTitle(title);
+                long id = db.insertNote(cntlr.getTitle(), cntlr.getNote(),cntlr.getDate(), cntlr.getCoordinates(), cntlr.getBold(), cntlr.getItalics(), cntlr.getUnderline(), null, cntlr.getPhotograph());
+                System.out.println(id);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        builder.show();
     }
 }

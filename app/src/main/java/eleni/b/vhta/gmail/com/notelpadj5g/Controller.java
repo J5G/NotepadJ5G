@@ -11,7 +11,7 @@ public class Controller
     public static final String columnId = "ID";
     public static final String columnText = "TEXT";
     public static final String columnTitle = "TITLE";
-    public static final String columnDate = "TIMESTAMP";
+    public static final String columnDate = "DATE";
     public static final String columnCoordinates = "COORDINATES";
     public static final String columnBold = "BOLD";
     public static final String columnItalics = "ITALICS";
@@ -19,11 +19,12 @@ public class Controller
     public static final String columnPhotograph = "PHOTOGRAPH";
     public static final String columnRecord = "RECORD";
 
-    public static final String createTable="CREATE TABLE NOTES ( ID INTEGER PRIMARY KEY AUTOINCREMENT, TITLE TEXT, TEXT TEXT, TIMESTAMP DATETIME DEFAULT CURRENT_TIMESTAMP, COORDINATES TEXT, BOLD INT, ITALICS INT, UNDERLINE INT, RECORD BLOB, PHOTOGRAPH TEXT )";
+    public static final String createTable="CREATE TABLE NOTES ( ID INTEGER PRIMARY KEY AUTOINCREMENT, TITLE TEXT, TEXT TEXT, DATE TEXT, COORDINATES TEXT, BOLD INT, ITALICS INT, UNDERLINE INT, RECORD BLOB, PHOTOGRAPH TEXT )";
 
     private int notesID;
     private String title;
     private String note;
+    private String date;
     private String coordinates;
     private Blob record;
     private int bold;
@@ -36,11 +37,12 @@ public class Controller
 
     }
 
-    public Controller(int id, String title, String note, String coordinates, Blob record, int bold, int italics, int underline, String photograph)
+    public Controller(int id, String title, String note,String date, String coordinates, Blob record, int bold, int italics, int underline, String photograph)
     {
         this.notesID = id;
         this.title = title;
         this.note = note;
+        this.date = date;
         this.coordinates = coordinates;
         this.record = record;
         this.bold = bold;
@@ -79,6 +81,15 @@ public class Controller
         this.note = note;
     }
 
+    public void setDate(String date)
+    {
+        this.date = date;
+    }
+
+    public String getDate()
+    {
+        return date;
+    }
 
     public String getCoordinates()
     {
