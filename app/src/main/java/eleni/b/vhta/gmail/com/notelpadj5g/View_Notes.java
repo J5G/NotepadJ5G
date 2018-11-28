@@ -26,6 +26,7 @@ public class View_Notes extends AppCompatActivity {
     Database db = new Database(this);
     String item;
     SwipeRefreshLayout swipeRefreshLayout;
+    String total;
 
 
     @Override
@@ -75,6 +76,7 @@ public class View_Notes extends AppCompatActivity {
         {
             item= list.getItemAtPosition(position).toString();
             edit_box();
+
         }
     };
 
@@ -93,8 +95,20 @@ public class View_Notes extends AppCompatActivity {
         });
         builder.setPositiveButton("View Note or Update", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-
+            public void onClick(DialogInterface dialog, int which)
+            {
+                View v =new View(View_Notes.this);
+                db.setTitleByID(db.getNoteID(total));
+                db.setNoteByID(db.getNoteID(total));
+                db.setDateByID(db.getNoteID(total));
+                db.setCoordinatesByID(db.getNoteID(total));
+                db.setBoldByID(db.getNoteID(total));
+                db.setItalicsByID(db.getNoteID(total));
+                db.setUnderlinecsByID(db.getNoteID(total));
+                db.setPhotoByID(db.getNoteID(total));
+                db.setRecordByID(db.getNoteID(total));
+                Intent intent=new Intent(v.getContext(),Editor.class);
+                startActivityForResult(intent,0);
             }
         });
         builder.setNeutralButton("Delete", new DialogInterface.OnClickListener() {
@@ -129,7 +143,7 @@ public class View_Notes extends AppCompatActivity {
             while (cursor.moveToNext()){
                 String date=cursor.getString(0);
                 String title=cursor.getString(1);
-                String total = date + " - " + title;
+                total = date + " - " + title;
                 listItem.add(total);
             }
         }
