@@ -96,4 +96,18 @@ public class Database extends SQLiteOpenHelper
         return cursor;
     }
 
+    public Cursor viewSortTitleData(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT DATE, TITLE FROM NOTES ORDER BY TITLE";
+        Cursor cursor= db.rawQuery(query,null);
+        return cursor;
+    }
+
+    public Cursor viewSortDateData(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT DATE, TITLE FROM NOTES ORDER BY DATE";
+        Cursor cursor= db.rawQuery(query,null);
+        return cursor;
+    }
+
 }
