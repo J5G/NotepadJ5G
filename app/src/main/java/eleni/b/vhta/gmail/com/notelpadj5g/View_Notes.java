@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -35,6 +36,9 @@ public class View_Notes extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view__notes);
 
+        final Button ButtonByDate = findViewById(R.id.ButtonByDate);
+        final Button ButtonByName = findViewById(R.id.ButtonByName);
+
         db = new Database(this);
         listItem = new ArrayList<>();
         list = findViewById(R.id.ListView);
@@ -54,6 +58,7 @@ public class View_Notes extends AppCompatActivity {
         });
 
         viewData();
+
 
         list.setOnItemClickListener(onListClick);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
@@ -80,6 +85,20 @@ public class View_Notes extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent=new Intent(v.getContext(),Editor.class);
                 startActivityForResult(intent,0);
+            }
+        });
+
+        ButtonByName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewSortTitleData();
+            }
+        });
+
+        ButtonByDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               viewSortDateData();
             }
         });
 
@@ -150,6 +169,40 @@ public class View_Notes extends AppCompatActivity {
             }
         }
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,listItem);
+        list.setAdapter(adapter);
+    }
+
+    public void viewSortTitleData() {
+        listItem = new ArrayList<>();
+        Cursor cursor = db.viewSortTitleData();
+        if (cursor.getCount() == 0) {
+            Toast.makeText(this, "no data to show", Toast.LENGTH_SHORT).show();
+        } else {
+            while (cursor.moveToNext()) {
+                String date = cursor.getString(0);
+                String title = cursor.getString(1);
+                String total = date + " - " + title;
+                listItem.add(total);
+            }
+        }
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listItem);
+        list.setAdapter(adapter);
+    }
+
+    public void viewSortDateData() {
+        listItem = new ArrayList<>();
+        Cursor cursor = db.viewSortDateData();
+        if (cursor.getCount() == 0) {
+            Toast.makeText(this, "no data to show", Toast.LENGTH_SHORT).show();
+        } else {
+            while (cursor.moveToNext()) {
+                String date = cursor.getString(0);
+                String title = cursor.getString(1);
+                String total = date + " - " + title;
+                listItem.add(total);
+            }
+        }
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listItem);
         list.setAdapter(adapter);
     }
 }
