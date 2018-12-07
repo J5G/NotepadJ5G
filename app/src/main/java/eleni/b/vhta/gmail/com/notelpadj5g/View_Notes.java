@@ -129,7 +129,9 @@ public class View_Notes extends AppCompatActivity {
         builder.setPositiveButton("View Note or Update", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(View_Notes.this, EditorForUpdate.class);
 
+                startActivity(intent);
             }
         });
         builder.setNeutralButton("Delete", new DialogInterface.OnClickListener() {
