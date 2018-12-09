@@ -7,20 +7,6 @@ import java.util.Date;
 
 public class Controller
 {
-    public static final String tableName = "NOTES";
-    public static final String columnId = "ID";
-    public static final String columnText = "TEXT";
-    public static final String columnTitle = "TITLE";
-    public static final String columnDate = "DATE";
-    public static final String columnCoordinates = "COORDINATES";
-    public static final String columnBold = "BOLD";
-    public static final String columnItalics = "ITALICS";
-    public static final String columnUnderline = "UNDERLINE";
-    public static final String columnPhotograph = "PHOTOGRAPH";
-    public static final String columnRecord = "RECORD";
-
-    public static final String createTable="CREATE TABLE NOTES ( ID INTEGER PRIMARY KEY AUTOINCREMENT, TITLE TEXT, TEXT TEXT, DATE TEXT, COORDINATES TEXT, BOLD INT, ITALICS INT, UNDERLINE INT, RECORD BLOB, PHOTOGRAPH TEXT )";
-
     private int notesID;
     private String title;
     private String note;
@@ -37,7 +23,7 @@ public class Controller
 
     }
 
-    public Controller(int id, String title, String note,String date, String coordinates, Blob record, int bold, int italics, int underline, String photograph)
+    public Controller(int id, String title)
     {
         this.notesID = id;
         this.title = title;
