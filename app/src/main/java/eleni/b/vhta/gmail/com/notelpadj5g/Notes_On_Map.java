@@ -118,19 +118,13 @@ public class Notes_On_Map extends AppCompatActivity implements OnMapReadyCallbac
     }
     public void getNotesLocation()
     {
-        Log.d(TAG, "getDeviceLocation: getting notes current location");
-
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         Cursor location = db.getNotesLocation();
         int markersNum = location.getCount();
-        for (int i= 0; i < markersNum ; i++) {
-            if (location.moveToFirst()) {
-                try {
-                    if (mLocationPermissionsGranted) {
-                        addMarkers(location.getString(1), DEFAULT_ZOOM, location.getString(0), location.getString(2), location.getString(3));
-                    }
-                } catch (SecurityException e) {
-                    Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
+        if (location.moveToFirst()) {
+            if (mLocationPermissionsGranted) {
+                for (int i = 0; i < markersNum; i++) {
+                    addMarkers(location.getString(1), DEFAULT_ZOOM, location.getString(0), location.getString(2), location.getString(3));
+                i++;
                 }
             }
         }
@@ -145,10 +139,10 @@ public class Notes_On_Map extends AppCompatActivity implements OnMapReadyCallbac
             int position = latlng.indexOf(" ");
             String lang = latlng.substring(0, position - 1);
             String lon = latlng.substring(position + 1, latlng.length());
-            LatLng coordinates = new LatLng(Long.parseLong(lang), Long.parseLong(lon));
+            LatLng coordinates = new LatLng(Double.parseDouble(lang), Double.parseDouble(lon));
             MarkerOptions options = new MarkerOptions().position(coordinates).title(title).snippet(snippet);
             mMap.addMarker(options);
-        } else
+        } else if (latlng == null)
         {
             LatLng coordinates = new LatLng(0,0);
             MarkerOptions options = new MarkerOptions().position(coordinates).title(title).snippet(snippet);

@@ -35,6 +35,8 @@ public class View_Notes extends AppCompatActivity {
     SwipeRefreshLayout swipeRefreshLayout;
     SearchView searchView;
 
+    public static int NOTE_ID;
+
     private static final String TAG ="View_Notes";
     private static final int ERROR_DIALOG_REQUEST=9001;
 
@@ -129,6 +131,9 @@ public class View_Notes extends AppCompatActivity {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
         {
             item= list.getItemAtPosition(position).toString();
+            int pos = item.indexOf("-");
+            String title = item.substring(pos+2,item.length());
+            NOTE_ID = db.getNoteID(title);
             edit_box();
         }
     };
@@ -150,7 +155,6 @@ public class View_Notes extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(View_Notes.this, EditorForUpdate.class);
-
                 startActivity(intent);
             }
         });

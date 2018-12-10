@@ -63,12 +63,18 @@ public class Database extends SQLiteOpenHelper
         return notesID;
     }
 
-    public int updateNote(Controller note){
+    public int updateNote(int id, String text, String date, String coordinates, int bold, int italics, int underline, String photo){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(Controller.columnText, note.getNote());
+        values.put(Controller.columnText, text);
+        values.put(Controller.columnDate, date);
+        values.put(Controller.columnCoordinates, coordinates);
+        values.put(Controller.columnBold, bold);
+        values.put(Controller.columnItalics, italics);
+        values.put(Controller.columnUnderline, underline);
+        values.put(Controller.columnPhotograph, photo);
         return db.update(Controller.tableName,values,Controller.columnId + " =? ", new String[]{
-                String.valueOf(note.getNotesID())});
+                String.valueOf(id)});
     }
 
     private Bitmap getBitmapFromEncodedString(String encodedString){
@@ -117,5 +123,24 @@ public class Database extends SQLiteOpenHelper
         Cursor cursor= db.rawQuery(query,null);
         return cursor;
     }
+    public int getNoteID(String title)
+    {
+        int id = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT ID FROM NOTES WHERE TITLE ='"+title+"'";
+        Cursor c = db.rawQuery(query,null);
+        if (c.moveToFirst()){
+            id=c.getInt(0);
+            return id;
+        }
+        return id;
+    }
 
+    public Cursor getData(int id)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM NOTES WHERE ID = "+id;
+        Cursor cursor = db.rawQuery(query,null);
+        return cursor;
+    }
 }
