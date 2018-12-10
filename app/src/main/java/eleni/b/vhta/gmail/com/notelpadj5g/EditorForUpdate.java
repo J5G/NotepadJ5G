@@ -80,9 +80,12 @@ public class EditorForUpdate extends AppCompatActivity {
         database= db.getReadableDatabase();
             Cursor c= db.getNote(database,id);
             database.close();
-            editText.setText(c.getString(0));
-            EditorTextBox.setText(c.getString(1));
-
+            if(c.moveToFirst()) {
+                do {
+                    editText.setText(c.getString(0));
+                    EditorTextBox.setText(c.getString(1));
+                }while(c.moveToNext());
+            }
 
         }
 
