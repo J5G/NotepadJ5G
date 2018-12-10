@@ -129,7 +129,7 @@ public class Database extends SQLiteOpenHelper
         values.put(columnItalics, italics);
         values.put(columnUnderline, underline);
         values.put(columnPhotograph, photograph);
-        db.update(tableName,values,columnTitle + "LIKE '" + editTitle + "'",null);
+        db.update(tableName,values,columnTitle + " LIKE '%" + editTitle + "%'",null);
         db.close();
     }
 
