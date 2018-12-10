@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">NoteLpadJ5G</string>
     <string name="CtxMenuHeader">Choose action</string>
+    <string name="updateNoteButton">Update note</string>
+    <string name="validation">Please fill the title and/or content field</string>
 </resources>

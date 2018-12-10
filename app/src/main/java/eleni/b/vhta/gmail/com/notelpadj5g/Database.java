@@ -1,6 +1,5 @@
 package eleni.b.vhta.gmail.com.notelpadj5g;
 
-import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -9,14 +8,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
-import android.view.ViewDebug;
+
 
 import java.sql.Blob;
 
 public class Database extends SQLiteOpenHelper
 {
     //version of database
-    private static final int databaseVersion = 5;
+    private static final int databaseVersion = 9;
     //database name
     private static final String databaseName = "Notepad";
 
@@ -56,7 +55,7 @@ public class Database extends SQLiteOpenHelper
 
     //in case of upgrade we are dropping the old table and we create the new one
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
+    public void onUpgrade(SQLiteDatabase db, int arg1, int arg2)
     {
         db.execSQL("DROP TABLE IF EXISTS " + tableName);
 
@@ -90,7 +89,7 @@ public class Database extends SQLiteOpenHelper
     }
 
     public Cursor getNotes(SQLiteDatabase db){
-        Cursor c= db.query(tableName,new String[]{columnTitle,columnText},null,null,null,null, "ID DESC");
+        Cursor c = db.query(tableName,new String[]{columnTitle,columnText},null,null,null,null, "ID DESC");
         //moving to the first note
         c.moveToFirst();
         //and returning Cursor object

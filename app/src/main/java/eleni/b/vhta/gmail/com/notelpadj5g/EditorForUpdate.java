@@ -1,7 +1,9 @@
 package eleni.b.vhta.gmail.com.notelpadj5g;
 
-import android.content.DialogInterface;
+
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
@@ -12,7 +14,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateUtils;
 import android.util.Base64;
@@ -44,8 +45,15 @@ public class EditorForUpdate extends AppCompatActivity {
     private TextView dateTimeView;
     private static final String TAG ="Editor";
     private static final int ERROR_DIALOG_REQUEST=9001;
-    final Controller cntlr = new Controller();
-    final Database db= new Database(this);
+    Controller cntlr = new Controller();
+    Database db ;
+    private SQLiteDatabase database;
+    private FloatingActionButton ButtonSave;
+    private EditText EditorTextBox;
+    boolean isEdit;
+    private int id = 0;
+    private String editTitle;
+    private EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +63,28 @@ public class EditorForUpdate extends AppCompatActivity {
         final CheckBox CheckBoxBold = findViewById(R.id.CheckBoxBold);
         final CheckBox CheckBoxItalics = findViewById(R.id.CheckBoxItalics);
         final CheckBox CheckBoxUnderline = findViewById(R.id.CheckBoxUnderline);
-        final EditText EditorTextBox = findViewById(R.id.EditorTextBox);
-        final FloatingActionButton ButtonSave= findViewById(R.id.ButtonSave);
+        EditorTextBox = findViewById(R.id.EditorTextBox);
+        ButtonSave= findViewById(R.id.ButtonSave);
+        editText = findViewById(R.id.editText);
         final Button ButtonCoordinates = findViewById(R.id.ButtonCoordinates);
         FloatingActionButton ButtonBack= findViewById(R.id.ButtonBack);
-        final Database db= new Database(this);
+        db= new Database(getApplicationContext());
+        Intent mIntent = getIntent();
+        editTitle = mIntent.getStringExtra("TITLE");
+        id= mIntent.getIntExtra("id",0);
+        isEdit= mIntent.getBooleanExtra("isEdit",false);
+
+        if(isEdit)
+        {
+        Log.d(TAG,"isEdit");
+        database= db.getReadableDatabase();
+            Cursor c= db.getNote(database,id);
+            database.close();
+            editText.setText(c.getString(0));
+            EditorTextBox.setText(c.getString(1));
+
+
+        }
 
         imgPicture = (ImageView) findViewById(R.id.imageView2);
 
@@ -80,8 +105,21 @@ public class EditorForUpdate extends AppCompatActivity {
                 String imgPictureString = imageViewEncodeToString(imgPicture);
                 cntlr.setNote(EditorTextBox.getText().toString());
                 cntlr.setPhotograph(imgPictureString);
+                String title = editText.getText().toString();
+                String content = EditorTextBox.getText().toString();
+                if (title.equals("") || content.equals("")) {
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.validation), Toast.LENGTH_LONG);
+                    return;
+                }
+                if (!isEdit){
+                    db=new Database(getApplicationContext());
+                    db.insertNote(title, content,cntlr.getDate(), cntlr.getCoordinates(), cntlr.getBold(), cntlr.getItalics(), cntlr.getUnderline(), null, cntlr.getPhotograph());
 
+                }
+                else {
+                    db.updateNote(title,content,cntlr.getDate(), cntlr.getCoordinates(), cntlr.getBold(), cntlr.getItalics(), cntlr.getUnderline(), null, cntlr.getPhotograph(),editTitle);
 
+                }
 
             }
 
@@ -231,6 +269,12 @@ public class EditorForUpdate extends AppCompatActivity {
             Toast.makeText(this,"we cannot make map requests",Toast.LENGTH_SHORT).show();
         }
         return false;
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        db.close();
     }
 
 

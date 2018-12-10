@@ -22,9 +22,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.AdapterView.OnItemClickListener;
+
 
 
 
@@ -55,9 +53,11 @@ public class View_Notes extends AppCompatActivity implements AdapterView.OnItemC
         final Button ButtonByDate = findViewById(R.id.ButtonByDate);
         final Button ButtonByName = findViewById(R.id.ButtonByName);
         list = findViewById(R.id.ListView);
-        db = new Database(this);
+        db = new Database(getApplicationContext());
         listItem = new ArrayList<>();
         searchView= findViewById(R.id.SearchNote);
+        setNotes();
+        this.registerForContextMenu(list);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -72,8 +72,8 @@ public class View_Notes extends AppCompatActivity implements AdapterView.OnItemC
             }
         });
 
-        setNotes();
-        this.registerForContextMenu(list);
+
+
 
 
         //the Button new note
@@ -81,7 +81,7 @@ public class View_Notes extends AppCompatActivity implements AdapterView.OnItemC
         newNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Editor.class));
+                startActivity(new Intent(getApplicationContext(), EditorForUpdate.class));
             }
         });
 
@@ -122,7 +122,17 @@ public class View_Notes extends AppCompatActivity implements AdapterView.OnItemC
         }
         adapter= new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,titles);
         list.setAdapter(adapter);
-        list.setOnItemClickListener((AdapterView.OnItemClickListener) this);
+        list.setOnItemClickListener(this);
+
+    }
+    // always when we start this activity we want to refresh the list of notes
+    @Override
+
+    protected void onResume() {
+
+        super.onResume();
+
+        setNotes();
 
     }
 
@@ -161,29 +171,18 @@ public class View_Notes extends AppCompatActivity implements AdapterView.OnItemC
         return false;
     }
 
-    /*
     @Override
-    public void onItemClick ( AdapterView<?> arg0, View arg1, int arg2, long arg3)
+    public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3)
     {
-       TextView tv = (TextView) arg1;
-       String title = tv.getText().toString();
-       Intent mIntent = new Intent(this,EditorForUpdate.class);
-       mIntent.putExtra("title",title);
-       mIntent.putExtra("ID", items.get(arg2).getNotesID());
-       startActivity(mIntent);
-
+        TextView tv = (TextView) arg1;
+        String title = tv.getText().toString();
+        Intent mIntent = new Intent(this,EditorForUpdate.class);
+        mIntent.putExtra("title",title);
+        mIntent.putExtra("id", items.get(arg2).getNotesID());
+        startActivity(mIntent);
     }
-    */
 
-    @Override
 
-    protected void onResume() {
-
-        super.onResume();
-
-        setNotes();
-
-    }
 
 
 
@@ -222,9 +221,5 @@ public class View_Notes extends AppCompatActivity implements AdapterView.OnItemC
     }
 
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-    }
 }
 
