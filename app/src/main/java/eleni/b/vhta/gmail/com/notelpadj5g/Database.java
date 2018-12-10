@@ -110,4 +110,12 @@ public class Database extends SQLiteOpenHelper
         return cursor;
     }
 
+    public Cursor getNotesLocation()
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT TITLE, COORDINATES, TEXT, DATE FROM NOTES";
+        Cursor cursor= db.rawQuery(query,null);
+        return cursor;
+    }
+
 }
