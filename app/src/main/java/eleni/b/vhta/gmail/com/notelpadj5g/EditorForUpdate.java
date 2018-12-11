@@ -48,7 +48,7 @@ public class EditorForUpdate extends AppCompatActivity {
     final Controller cntlr = new Controller();
     final Database db= new Database(this);
     int noteId = View_Notes.NOTE_ID;
-    Cursor data = db.getData(noteId);
+    Cursor data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +63,33 @@ public class EditorForUpdate extends AppCompatActivity {
         final Button ButtonCoordinates = findViewById(R.id.ButtonCoordinates);
         FloatingActionButton ButtonBack= findViewById(R.id.ButtonBack);
         final Database db= new Database(this);
+        data = db.getData(noteId);
 
         if(data.moveToFirst()) {
             EditorTextBox.setText(data.getString(2));
+            if(data.getInt(5) == 1) {
+                CheckBoxBold.setChecked(true);
+                EditorTextBox.setTypeface(null, Typeface.BOLD);
+            }
+            if(data.getInt(6) == 1) {
+                CheckBoxItalics.setChecked(true);
+                EditorTextBox.setTypeface(null, Typeface.ITALIC);
+            }else if (data.getInt(5)==1 && data.getInt(6)==1)
+            {
+                CheckBoxBold.setChecked(true);
+                CheckBoxItalics.setChecked(true);
+                EditorTextBox.setTypeface(null, Typeface.BOLD_ITALIC);
+            }
+            if(data.getInt(7) == 1) {
+                CheckBoxUnderline.setChecked(true);
+                EditorTextBox.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
+            }
         }
         imgPicture = (ImageView) findViewById(R.id.imageView2);
+        if(data.moveToFirst())
+        {
+            imgPicture.setImageBitmap(db.getBitmapFromEncodedString(data.getString(9)));
+        }
 
         dateTimeView = (TextView) findViewById(R.id.textViewDate);
         if(data.moveToFirst()){
@@ -96,16 +118,11 @@ public class EditorForUpdate extends AppCompatActivity {
         CheckBoxBold.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                int checked=0;
-                if(data.moveToFirst()) {
-                    checked = data.getInt(5);
-                }
-                if (checked == 1) {
-                    CheckBoxBold.setChecked(true);
+
+                if (CheckBoxBold.isChecked()) {
                     EditorTextBox.setTypeface(null, Typeface.BOLD);
                     cntlr.setBold(1);
                 } else {
-                    CheckBoxBold.setChecked(false);
                     EditorTextBox.setTypeface(null, Typeface.NORMAL);
                     cntlr.setBold(0);
                 }
@@ -116,16 +133,13 @@ public class EditorForUpdate extends AppCompatActivity {
         CheckBoxItalics.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                int checked=0;
-                if(data.moveToFirst()) {
-                    checked = data.getInt(6);
-                }
-                if (checked==1) {
-                    CheckBoxItalics.setChecked(true);
+                if (CheckBoxItalics.isChecked() && CheckBoxBold.isChecked()) {
+                    EditorTextBox.setTypeface(null, Typeface.BOLD_ITALIC);
+                    cntlr.setItalics(1);
+                }else if(CheckBoxItalics.isChecked() && CheckBoxBold.isChecked()==false){
                     EditorTextBox.setTypeface(null, Typeface.ITALIC);
                     cntlr.setItalics(1);
                 } else {
-                    CheckBoxItalics.setChecked(false);
                     EditorTextBox.setTypeface(null, Typeface.NORMAL);
                     cntlr.setItalics(0);
                 }
@@ -135,16 +149,10 @@ public class EditorForUpdate extends AppCompatActivity {
         CheckBoxUnderline.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                int checked=0;
-                if(data.moveToFirst()) {
-                    checked = data.getInt(7);
-                }
-                if (checked==1) {
-                    CheckBoxUnderline.setChecked(true);
+                if (CheckBoxUnderline.isChecked()) {
                     EditorTextBox.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
                     cntlr.setUnderline(1);
                 } else {
-                    CheckBoxUnderline.setChecked(false);
                     EditorTextBox.setPaintFlags(Paint.LINEAR_TEXT_FLAG);
                     cntlr.setUnderline(0);
                 }

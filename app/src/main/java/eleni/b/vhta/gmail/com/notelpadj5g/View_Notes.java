@@ -167,7 +167,7 @@ public class View_Notes extends AppCompatActivity {
                 }
                 else
                 {
-                    db.delete(item);
+                    db.delete(NOTE_ID);
                     item = null;
                     listItem = new ArrayList<>();
                     list = findViewById(R.id.ListView);

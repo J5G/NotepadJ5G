@@ -109,7 +109,10 @@ public class Editor extends AppCompatActivity  {
         CheckBoxItalics.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (CheckBoxItalics.isChecked()) {
+                if (CheckBoxItalics.isChecked() && CheckBoxBold.isChecked()) {
+                    EditorTextBox.setTypeface(null, Typeface.BOLD_ITALIC);
+                    cntlr.setItalics(1);
+                }else if(CheckBoxItalics.isChecked() && CheckBoxBold.isChecked()==false){
                     EditorTextBox.setTypeface(null, Typeface.ITALIC);
                     cntlr.setItalics(1);
                 } else {

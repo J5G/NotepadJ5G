@@ -77,7 +77,7 @@ public class Database extends SQLiteOpenHelper
                 String.valueOf(id)});
     }
 
-    private Bitmap getBitmapFromEncodedString(String encodedString){
+    public Bitmap getBitmapFromEncodedString(String encodedString){
 
         byte[] arrimg = Base64.decode(encodedString, Base64.URL_SAFE);
         Bitmap img = BitmapFactory.decodeByteArray(arrimg, 0, arrimg.length);
@@ -85,13 +85,10 @@ public class Database extends SQLiteOpenHelper
 
     }
 
-    public void delete(String item)
+    public void delete(int noteID)
     {
         SQLiteDatabase db = this.getWritableDatabase();
-        int position = item.indexOf("-");
-        String date = item.substring(0,position-1);
-        String title = item.substring(position+1 ,item.length());
-        String query = "DELETE FROM NOTES WHERE TITLE LIKE '%"+title+"%' OR DATE LIKE '%"+date+"%'";
+        String query = "DELETE FROM NOTES WHERE ID = "+noteID;
         db.execSQL(query);
 
     }
