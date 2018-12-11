@@ -77,13 +77,6 @@ public class Database extends SQLiteOpenHelper
                 String.valueOf(id)});
     }
 
-    public Bitmap getBitmapFromEncodedString(String encodedString){
-
-        byte[] arrimg = Base64.decode(encodedString, Base64.URL_SAFE);
-        Bitmap img = BitmapFactory.decodeByteArray(arrimg, 0, arrimg.length);
-        return img;
-
-    }
     //Giorgos
     public void delete(int noteID)
     {

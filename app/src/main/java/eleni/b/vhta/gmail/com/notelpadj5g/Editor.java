@@ -216,7 +216,7 @@ public class Editor extends AppCompatActivity  {
     {
         Bitmap bitmapImage2 = ((BitmapDrawable)image.getDrawable()).getBitmap();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmapImage2.compress(Bitmap.CompressFormat.PNG,50,stream);
+        bitmapImage2.compress(Bitmap.CompressFormat.JPEG,100,stream);
         byte[] byteArray = stream.toByteArray();
         return Base64.encodeToString(byteArray, Base64.URL_SAFE);
     }
