@@ -3,7 +3,6 @@ package eleni.b.vhta.gmail.com.notelpadj5g;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,10 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -49,7 +45,6 @@ public class Notes_On_Map extends AppCompatActivity implements OnMapReadyCallbac
     private static final String TAG ="MapActivity";
     private Boolean mLocationPermissionsGranted = false;
     private GoogleMap mMap;
-    private FusedLocationProviderClient mFusedLocationProviderClient;
     Database db = new Database(this);
 
 
@@ -120,11 +115,11 @@ public class Notes_On_Map extends AppCompatActivity implements OnMapReadyCallbac
     {
         Cursor location = db.getNotesLocation();
         int markersNum = location.getCount();
-        if (location.moveToFirst()) {
-            if (mLocationPermissionsGranted) {
+        if (mLocationPermissionsGranted) {
+            if (location.moveToFirst()) {
                 for (int i = 0; i < markersNum; i++) {
                     addMarkers(location.getString(1), DEFAULT_ZOOM, location.getString(0), location.getString(2), location.getString(3));
-                i++;
+                    System.out.println(location.getString(1));
                 }
             }
         }
@@ -133,6 +128,7 @@ public class Notes_On_Map extends AppCompatActivity implements OnMapReadyCallbac
     private void addMarkers(String latlng, float zoom, String title, String text, String date)
     {
         String snippet = "Title: " +title +" Note: "+text+" Date: "+date;
+
         if(latlng != null)
         {
             latlng.trim();

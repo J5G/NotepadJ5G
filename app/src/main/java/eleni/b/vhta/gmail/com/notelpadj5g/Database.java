@@ -84,7 +84,7 @@ public class Database extends SQLiteOpenHelper
         return img;
 
     }
-
+    //Giorgos
     public void delete(int noteID)
     {
         SQLiteDatabase db = this.getWritableDatabase();

@@ -158,6 +158,7 @@ public class View_Notes extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        //Giorgos
         builder.setNeutralButton("Delete", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

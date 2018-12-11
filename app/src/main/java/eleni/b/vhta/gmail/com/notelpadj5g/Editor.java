@@ -48,6 +48,7 @@ public class Editor extends AppCompatActivity  {
     private static final int ERROR_DIALOG_REQUEST=9001;
     final Controller cntlr = new Controller();
     final Database db= new Database(this);
+    boolean clicked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +93,7 @@ public class Editor extends AppCompatActivity  {
 
 
         });
-
+        //Giorgos start
         CheckBoxBold.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -133,11 +134,13 @@ public class Editor extends AppCompatActivity  {
                 }
             }
         });
+        //Giorgos end
         ButtonCoordinates.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(servicesVersionCorrect())
                 {
+                    clicked = true;
                     Intent intent = new Intent(Editor.this, Map.class);
                     startActivity(intent);
                 }
@@ -254,6 +257,11 @@ public class Editor extends AppCompatActivity  {
                 EditText editTitle = (EditText)saveView.findViewById(R.id.title);
                 String title = editTitle.getText().toString();
                 cntlr.setTitle(title);
+                if (clicked == false)
+                {
+                    cntlr.setCoordinates(null);
+                }
+                System.out.println(cntlr.getCoordinates());
                 long id = db.insertNote(cntlr.getTitle(), cntlr.getNote(),cntlr.getDate(), cntlr.getCoordinates(), cntlr.getBold(), cntlr.getItalics(), cntlr.getUnderline(), null, cntlr.getPhotograph());
                 System.out.println(id);
             }

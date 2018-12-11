@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.Task;
 import static java.lang.String.valueOf;
 
 public class Map extends AppCompatActivity implements OnMapReadyCallback {
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Toast.makeText(this, "Map is ready", Toast.LENGTH_SHORT).show();
@@ -139,12 +140,11 @@ public class Map extends AppCompatActivity implements OnMapReadyCallback {
                             moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM);
                             String latitude;
                             String longitude;
-                            String coordinates;
                             latitude = (String) valueOf(currentLocation.getLatitude());
                             longitude = (String) valueOf(currentLocation.getLongitude());
+                            String coordinates;
                             coordinates = latitude +" " + longitude;
                             cntlr.setCoordinates(coordinates);
-
 
                         }else{
                             Log.d(TAG, "onComplete: current location is null");
