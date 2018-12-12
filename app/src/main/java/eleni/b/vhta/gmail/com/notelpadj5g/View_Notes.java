@@ -9,6 +9,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -16,6 +17,10 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+
 import java.util.ArrayList;
 
 
@@ -30,6 +35,11 @@ public class View_Notes extends AppCompatActivity {
     SwipeRefreshLayout swipeRefreshLayout;
     SearchView searchView;
 
+    public static int NOTE_ID;
+
+    private static final String TAG ="View_Notes";
+    private static final int ERROR_DIALOG_REQUEST=9001;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +48,7 @@ public class View_Notes extends AppCompatActivity {
 
         final Button ButtonByDate = findViewById(R.id.ButtonByDate);
         final Button ButtonByName = findViewById(R.id.ButtonByName);
+
 
         db = new Database(this);
         listItem = new ArrayList<>();
@@ -102,6 +113,17 @@ public class View_Notes extends AppCompatActivity {
             }
         });
 
+        FloatingActionButton map= findViewById(R.id.map);
+        map.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(servicesVersionCorrect())
+                {
+                    Intent intent = new Intent(View_Notes.this, Notes_On_Map.class);
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     private AdapterView.OnItemClickListener onListClick = new AdapterView.OnItemClickListener() {
@@ -109,6 +131,9 @@ public class View_Notes extends AppCompatActivity {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
         {
             item= list.getItemAtPosition(position).toString();
+            int pos = item.indexOf("-");
+            String title = item.substring(pos+2,item.length());
+            NOTE_ID = db.getNoteID(title);
             edit_box();
         }
     };
@@ -130,10 +155,10 @@ public class View_Notes extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(View_Notes.this, EditorForUpdate.class);
-
                 startActivity(intent);
             }
         });
+        //Giorgos
         builder.setNeutralButton("Delete", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -143,7 +168,7 @@ public class View_Notes extends AppCompatActivity {
                 }
                 else
                 {
-                    db.delete(item);
+                    db.delete(NOTE_ID);
                     item = null;
                     listItem = new ArrayList<>();
                     list = findViewById(R.id.ListView);
@@ -206,6 +231,28 @@ public class View_Notes extends AppCompatActivity {
         }
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listItem);
         list.setAdapter(adapter);
+    }
+
+    public boolean servicesVersionCorrect()
+    {
+        Log.d(TAG,"servicesVersionCorrect: checking google services version");
+        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(View_Notes.this);
+        if(available == ConnectionResult.SUCCESS)
+        {
+            Log.d(TAG,"servicesVersionCorrect: Google Play Services is working");
+            return true;
+        }
+        else if(GoogleApiAvailability.getInstance().isUserResolvableError(available))
+        {
+            Log.d(TAG,"servicesVersionCorrect: An error occured be it can be solved");
+            android.app.Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(View_Notes.this, available, ERROR_DIALOG_REQUEST);
+            dialog.show();
+        }
+        else
+        {
+            Toast.makeText(this,"we cannot make map requests",Toast.LENGTH_SHORT).show();
+        }
+        return false;
     }
 }
 

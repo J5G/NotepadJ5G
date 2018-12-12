@@ -2,6 +2,7 @@ package eleni.b.vhta.gmail.com.notelpadj5g;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
@@ -46,6 +47,8 @@ public class EditorForUpdate extends AppCompatActivity {
     private static final int ERROR_DIALOG_REQUEST=9001;
     final Controller cntlr = new Controller();
     final Database db= new Database(this);
+    int noteId = View_Notes.NOTE_ID;
+    Cursor data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,15 +63,41 @@ public class EditorForUpdate extends AppCompatActivity {
         final Button ButtonCoordinates = findViewById(R.id.ButtonCoordinates);
         FloatingActionButton ButtonBack= findViewById(R.id.ButtonBack);
         final Database db= new Database(this);
+        data = db.getData(noteId);
 
+        if(data.moveToFirst()) {
+            EditorTextBox.setText(data.getString(2));
+            //Giorgos start
+            if(data.getInt(5) == 1) {
+                CheckBoxBold.setChecked(true);
+                EditorTextBox.setTypeface(null, Typeface.BOLD);
+            }
+            if(data.getInt(6) == 1) {
+                CheckBoxItalics.setChecked(true);
+                EditorTextBox.setTypeface(null, Typeface.ITALIC);
+            }
+            if (data.getInt(5)==1 && data.getInt(6)==1)
+            {
+                CheckBoxBold.setChecked(true);
+                CheckBoxItalics.setChecked(true);
+                EditorTextBox.setTypeface(null, Typeface.BOLD_ITALIC);
+            }
+            if(data.getInt(7) == 1) {
+                CheckBoxUnderline.setChecked(true);
+                EditorTextBox.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
+            }
+        }//Giorgos end
         imgPicture = (ImageView) findViewById(R.id.imageView2);
+        if(data.moveToFirst())
+        {
+            imgPicture.setImageBitmap(db.getBitmapFromEncodedString(data.getString(9)));
+        }
 
         dateTimeView = (TextView) findViewById(R.id.textViewDate);
-        Calendar calendar = Calendar.getInstance();
-        String currentDate = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
-        dateTimeView.setText(currentDate);
-        String dateTime = DateUtils.formatDateTime(this, calendar.getTimeInMillis(), DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_NUMERIC_DATE | DateUtils.FORMAT_SHOW_TIME);
-        cntlr.setDate(dateTime);
+        if(data.moveToFirst()){
+        dateTimeView.setText(data.getString(3));
+        cntlr.setDate(data.getString(3));
+        }
 
 
         ButtonSave.setOnClickListener(new View.OnClickListener() {
@@ -80,17 +109,18 @@ public class EditorForUpdate extends AppCompatActivity {
                 String imgPictureString = imageViewEncodeToString(imgPicture);
                 cntlr.setNote(EditorTextBox.getText().toString());
                 cntlr.setPhotograph(imgPictureString);
-
+                db.updateNote(noteId,cntlr.getNote(),cntlr.getDate(),cntlr.getCoordinates(),cntlr.getBold(), cntlr.getItalics(),cntlr.getUnderline(),cntlr.getPhotograph());
 
 
             }
 
 
         });
-
+        //Giorgos start
         CheckBoxBold.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
                 if (CheckBoxBold.isChecked()) {
                     EditorTextBox.setTypeface(null, Typeface.BOLD);
                     cntlr.setBold(1);
@@ -105,7 +135,10 @@ public class EditorForUpdate extends AppCompatActivity {
         CheckBoxItalics.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (CheckBoxItalics.isChecked()) {
+                if (CheckBoxItalics.isChecked() && CheckBoxBold.isChecked()) {
+                    EditorTextBox.setTypeface(null, Typeface.BOLD_ITALIC);
+                    cntlr.setItalics(1);
+                }else if(CheckBoxItalics.isChecked() && CheckBoxBold.isChecked()==false){
                     EditorTextBox.setTypeface(null, Typeface.ITALIC);
                     cntlr.setItalics(1);
                 } else {
@@ -126,7 +159,7 @@ public class EditorForUpdate extends AppCompatActivity {
                     cntlr.setUnderline(0);
                 }
             }
-        });
+        });//Giorgos end
 
         ButtonCoordinates.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,7 +222,6 @@ public class EditorForUpdate extends AppCompatActivity {
                     // Get bitmap from stream
                     Bitmap bitmapImage = BitmapFactory.decodeStream(inputStream);
                     // Show image to the user
-                    imgPicture.setImageBitmap(bitmapImage);
                     String imgPictureString = imageViewEncodeToString(imgPicture);
                     cntlr.setPhotograph(imgPictureString);
 

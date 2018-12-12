@@ -33,6 +33,8 @@
         </activity>
         <activity android:name=".Editor" />
         <activity android:name=".Map"></activity>
+        <activity android:name=".Notes_On_Map"></activity>
+        <activity android:name=".EditorForUpdate"></activity>
     </application>
 
 </manifest>

@@ -2,7 +2,7 @@ package eleni.b.vhta.gmail.com.notelpadj5g;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.location.Location;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,21 +11,16 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-import static java.lang.String.valueOf;
 
-public class Map extends AppCompatActivity implements OnMapReadyCallback {
-
+public class Notes_On_Map extends AppCompatActivity implements OnMapReadyCallback
+{
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Toast.makeText(this, "Map is ready", Toast.LENGTH_SHORT).show();
@@ -34,8 +29,8 @@ public class Map extends AppCompatActivity implements OnMapReadyCallback {
 
         if (mLocationPermissionsGranted)
         {
-            getDeviceLocation();
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            getNotesLocation();
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
             {
                 return;
             }
@@ -43,16 +38,15 @@ public class Map extends AppCompatActivity implements OnMapReadyCallback {
         }
     }
 
-    private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
-    private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
+    private static final String FINE_LOCATION = android.Manifest.permission.ACCESS_FINE_LOCATION;
+    private static final String COURSE_LOCATION = android.Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 15f;
     private static final String TAG ="MapActivity";
     private Boolean mLocationPermissionsGranted = false;
     private GoogleMap mMap;
-    private FusedLocationProviderClient mFusedLocationProviderClient;
+    Database db = new Database(this);
 
-    final Controller cntlr = new Controller();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -65,7 +59,7 @@ public class Map extends AppCompatActivity implements OnMapReadyCallback {
 
     private void getLocationPermission()
     {
-        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+        String[] permissions = {android.Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
 
         if(ContextCompat.checkSelfPermission(this.getApplicationContext(), FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
         {
@@ -87,7 +81,7 @@ public class Map extends AppCompatActivity implements OnMapReadyCallback {
     {
         Log.d(TAG,"initMap: initializing map");
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(Map.this);
+        mapFragment.getMapAsync(Notes_On_Map.this);
     }
 
     @Override
@@ -117,51 +111,39 @@ public class Map extends AppCompatActivity implements OnMapReadyCallback {
             }
         }
     }
-
-    public void getDeviceLocation()
+    public void getNotesLocation()
     {
-        Log.d(TAG, "getDeviceLocation: getting the devices current location");
-
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
-        try{
-            if(mLocationPermissionsGranted)
-            {
-                final Task location = mFusedLocationProviderClient.getLastLocation();
-                location.addOnCompleteListener( new OnCompleteListener()
-                {
-                    @Override
-                    public void onComplete(@NonNull Task task)
-                    {
-                        if(task.isSuccessful())
-                        {
-                            Log.d(TAG, "onComplete: found location!");
-                            Location currentLocation = (Location) task.getResult();
-                            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM);
-                            String latitude;
-                            String longitude;
-                            latitude = (String) valueOf(currentLocation.getLatitude());
-                            longitude = (String) valueOf(currentLocation.getLongitude());
-                            String coordinates;
-                            coordinates = latitude +" " + longitude;
-                            cntlr.setCoordinates(coordinates);
-
-                        }else{
-                            Log.d(TAG, "onComplete: current location is null");
-                            Toast.makeText(Map.this, "unable to get current location",Toast.LENGTH_SHORT).show();
-
-                        }
-                    }
-                });
+        Cursor location = db.getNotesLocation();
+        int markersNum = location.getCount();
+        if (mLocationPermissionsGranted) {
+            if (location.moveToFirst()) {
+                for (int i = 0; i < markersNum; i++) {
+                    addMarkers(location.getString(1), DEFAULT_ZOOM, location.getString(0), location.getString(2), location.getString(3));
+                    System.out.println(location.getString(1));
+                }
             }
-        }catch (SecurityException e){
-            Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage() );
         }
     }
 
-    private void moveCamera(LatLng latlng, float zoom)
+    private void addMarkers(String latlng, float zoom, String title, String text, String date)
     {
-        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latlng.latitude + ",lng:" + latlng.longitude);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng,zoom));
+        String snippet = "Title: " +title +" Note: "+text+" Date: "+date;
+
+        if(latlng != null)
+        {
+            latlng.trim();
+            int position = latlng.indexOf(" ");
+            String lang = latlng.substring(0, position - 1);
+            String lon = latlng.substring(position + 1, latlng.length());
+            LatLng coordinates = new LatLng(Double.parseDouble(lang), Double.parseDouble(lon));
+            MarkerOptions options = new MarkerOptions().position(coordinates).title(title).snippet(snippet);
+            mMap.addMarker(options);
+        } else if (latlng == null)
+        {
+            LatLng coordinates = new LatLng(0,0);
+            MarkerOptions options = new MarkerOptions().position(coordinates).title(title).snippet(snippet);
+            mMap.addMarker(options);
+        }
     }
+
 }
