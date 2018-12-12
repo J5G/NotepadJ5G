@@ -1,22 +1,21 @@
 package eleni.b.vhta.gmail.com.notelpadj5g;
 
-import android.app.AlertDialog;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Base64;
-import android.view.ViewDebug;
-
 import java.sql.Blob;
 
 public class Database extends SQLiteOpenHelper
 {
+    //version of database
 
     private static final int databaseVersion = 4;
+
+    //database name
+
     private static final String databaseName = "Notepad";
 
 
@@ -26,6 +25,8 @@ public class Database extends SQLiteOpenHelper
 
     }
 
+    //creating the table in database
+
     @Override
     public void onCreate(SQLiteDatabase db)
 
@@ -33,12 +34,16 @@ public class Database extends SQLiteOpenHelper
         db.execSQL(Controller.createTable);
     }
 
+    //in case of upgrade we're dropping the old table, and create the new one
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
         db.execSQL("DROP TABLE IF EXISTS " + Controller.tableName);
         onCreate(db);
     }
+
+    //function for adding the note to database
 
     public long insertNote(String title, String text,String date, String coordinates, int bold, int italics, int underline, Blob record, String photograph){
         SQLiteDatabase db = this.getWritableDatabase();

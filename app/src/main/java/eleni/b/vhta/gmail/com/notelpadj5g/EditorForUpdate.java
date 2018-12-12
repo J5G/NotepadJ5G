@@ -1,6 +1,5 @@
 package eleni.b.vhta.gmail.com.notelpadj5g;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -13,9 +12,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.format.DateUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -34,8 +31,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.text.DateFormat;
-import java.util.Calendar;
 
 public class EditorForUpdate extends AppCompatActivity {
 
@@ -49,6 +44,7 @@ public class EditorForUpdate extends AppCompatActivity {
     final Database db= new Database(this);
     int noteId = View_Notes.NOTE_ID;
     Cursor data;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

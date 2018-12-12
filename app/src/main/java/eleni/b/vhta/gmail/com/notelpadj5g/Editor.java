@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
-import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -18,7 +17,6 @@ import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.util.Base64;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -27,10 +25,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -264,6 +260,8 @@ public class Editor extends AppCompatActivity  {
                 System.out.println(cntlr.getCoordinates());
                 long id = db.insertNote(cntlr.getTitle(), cntlr.getNote(),cntlr.getDate(), cntlr.getCoordinates(), cntlr.getBold(), cntlr.getItalics(), cntlr.getUnderline(), null, cntlr.getPhotograph());
                 System.out.println(id);
+                look_toast("Saved");
+
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -274,5 +272,9 @@ public class Editor extends AppCompatActivity  {
         });
 
         builder.show();
+    }
+
+    public void look_toast(String str1){
+        Toast.makeText(this,str1, Toast.LENGTH_SHORT).show();
     }
 }

@@ -1,12 +1,11 @@
 package eleni.b.vhta.gmail.com.notelpadj5g;
 
-import android.net.Uri;
-
 import java.sql.Blob;
-import java.util.Date;
 
 public class Controller
 {
+    // coluumn names
+
     public static final String tableName = "NOTES";
     public static final String columnId = "ID";
     public static final String columnText = "TEXT";
@@ -18,6 +17,8 @@ public class Controller
     public static final String columnUnderline = "UNDERLINE";
     public static final String columnPhotograph = "PHOTOGRAPH";
     public static final String columnRecord = "RECORD";
+
+    // sql query to creating table in database
 
     public static final String createTable="CREATE TABLE NOTES ( ID INTEGER PRIMARY KEY AUTOINCREMENT, TITLE TEXT, TEXT TEXT, DATE TEXT, COORDINATES TEXT, BOLD INT, ITALICS INT, UNDERLINE INT, RECORD BLOB, PHOTOGRAPH TEXT )";
 
