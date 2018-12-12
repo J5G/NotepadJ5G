@@ -140,8 +140,8 @@ public class Map extends AppCompatActivity implements OnMapReadyCallback {
                             moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM);
                             String latitude;
                             String longitude;
-                            latitude = (String) valueOf(currentLocation.getLatitude());
-                            longitude = (String) valueOf(currentLocation.getLongitude());
+                            latitude = valueOf(currentLocation.getLatitude());
+                            longitude = valueOf(currentLocation.getLongitude());
                             String coordinates;
                             coordinates = latitude +" " + longitude;
                             cntlr.setCoordinates(coordinates);

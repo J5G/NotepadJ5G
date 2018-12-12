@@ -63,6 +63,7 @@ public class EditorForUpdate extends AppCompatActivity {
 
         if(data.moveToFirst()) {
             EditorTextBox.setText(data.getString(2));
+
             //Giorgos start
             if(data.getInt(5) == 1) {
                 CheckBoxBold.setChecked(true);
@@ -82,7 +83,9 @@ public class EditorForUpdate extends AppCompatActivity {
                 CheckBoxUnderline.setChecked(true);
                 EditorTextBox.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
             }
-        }//Giorgos end
+        }
+        //Giorgos end
+
         imgPicture = (ImageView) findViewById(R.id.imageView2);
         if(data.moveToFirst())
         {
@@ -112,7 +115,8 @@ public class EditorForUpdate extends AppCompatActivity {
 
 
         });
-        //Giorgos start
+
+
         CheckBoxBold.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -155,7 +159,9 @@ public class EditorForUpdate extends AppCompatActivity {
                     cntlr.setUnderline(0);
                 }
             }
-        });//Giorgos end
+        });
+
+
 
         ButtonCoordinates.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,6 +173,7 @@ public class EditorForUpdate extends AppCompatActivity {
                 }
             }
         });
+
         ButtonBack.setOnClickListener(new View.OnClickListener()
         {
             @Override

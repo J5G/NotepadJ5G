@@ -29,14 +29,11 @@ public class View_Notes extends AppCompatActivity {
     ArrayList<String> listItem;
     ArrayAdapter adapter;
     ListView list;
-    AlertDialog alertDialog = null;
     Database db = new Database(this);
     String item;
     SwipeRefreshLayout swipeRefreshLayout;
     SearchView searchView;
-
     public static int NOTE_ID;
-
     private static final String TAG ="View_Notes";
     private static final int ERROR_DIALOG_REQUEST=9001;
 
@@ -72,7 +69,7 @@ public class View_Notes extends AppCompatActivity {
 
 
         list.setOnItemClickListener(onListClick);
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -158,6 +155,7 @@ public class View_Notes extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         //Giorgos
         builder.setNeutralButton("Delete", new DialogInterface.OnClickListener() {
             @Override

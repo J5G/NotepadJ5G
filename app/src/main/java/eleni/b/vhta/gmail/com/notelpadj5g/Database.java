@@ -71,6 +71,7 @@ public class Database extends SQLiteOpenHelper
     public int updateNote(int id, String text, String date, String coordinates, int bold, int italics, int underline, String photo){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
+
         values.put(Controller.columnText, text);
         values.put(Controller.columnDate, date);
         values.put(Controller.columnCoordinates, coordinates);
@@ -78,11 +79,11 @@ public class Database extends SQLiteOpenHelper
         values.put(Controller.columnItalics, italics);
         values.put(Controller.columnUnderline, underline);
         values.put(Controller.columnPhotograph, photo);
+
         return db.update(Controller.tableName,values,Controller.columnId + " =? ", new String[]{
                 String.valueOf(id)});
     }
 
-    //Giorgos
     public void delete(int noteID)
     {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -90,21 +91,24 @@ public class Database extends SQLiteOpenHelper
         db.execSQL(query);
 
     }
-    public Cursor viewData(){
+    public Cursor viewData()
+    {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT DATE, TITLE FROM NOTES";
         Cursor cursor= db.rawQuery(query,null);
         return cursor;
     }
 
-    public Cursor viewSortTitleData(){
+    public Cursor viewSortTitleData()
+    {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT DATE, TITLE FROM NOTES ORDER BY TITLE";
         Cursor cursor= db.rawQuery(query,null);
         return cursor;
     }
 
-    public Cursor viewSortDateData(){
+    public Cursor viewSortDateData()
+    {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT DATE, TITLE FROM NOTES ORDER BY DATE";
         Cursor cursor= db.rawQuery(query,null);
@@ -124,10 +128,13 @@ public class Database extends SQLiteOpenHelper
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT ID FROM NOTES WHERE TITLE ='"+title+"'";
         Cursor c = db.rawQuery(query,null);
-        if (c.moveToFirst()){
+
+        if (c.moveToFirst())
+        {
             id=c.getInt(0);
             return id;
         }
+
         return id;
     }
 

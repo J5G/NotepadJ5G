@@ -60,12 +60,12 @@ public class Editor extends AppCompatActivity  {
         final FloatingActionButton ButtonSave= findViewById(R.id.ButtonSave);
         final Button ButtonCoordinates = findViewById(R.id.ButtonCoordinates);
         FloatingActionButton ButtonBack= findViewById(R.id.ButtonBack);
-        final Database db= new Database(this);
 
 
-        imgPicture = (ImageView) findViewById(R.id.imageView2);
 
-        dateTimeView = (TextView) findViewById(R.id.textViewDate);
+        imgPicture = findViewById(R.id.imageView2);
+
+        dateTimeView = findViewById(R.id.textViewDate);
         Calendar calendar = Calendar.getInstance();
         String currentDate = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
         dateTimeView.setText(currentDate);
@@ -89,7 +89,8 @@ public class Editor extends AppCompatActivity  {
 
 
         });
-        //Giorgos start
+
+        // giorgos Start
         CheckBoxBold.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -130,7 +131,8 @@ public class Editor extends AppCompatActivity  {
                 }
             }
         });
-        //Giorgos end
+        //giorgos end
+
         ButtonCoordinates.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,10 +156,7 @@ public class Editor extends AppCompatActivity  {
         }
 
 
-        /**
-         * Invoke onImageGalleryClick when user clicks button Images
-         * @param v
-         */
+
         public void onImageGalleryClick(View v)
         {
             //Invoke Image Gallery
@@ -223,6 +222,7 @@ public class Editor extends AppCompatActivity  {
     {
         Log.d(TAG,"servicesVersionCorrect: checking google services version");
         int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(Editor.this);
+
         if(available == ConnectionResult.SUCCESS)
         {
             Log.d(TAG,"servicesVersionCorrect: Google Play Services is working");
@@ -238,6 +238,7 @@ public class Editor extends AppCompatActivity  {
         {
             Toast.makeText(this,"we cannot make map requests",Toast.LENGTH_SHORT).show();
         }
+
         return false;
     }
 
