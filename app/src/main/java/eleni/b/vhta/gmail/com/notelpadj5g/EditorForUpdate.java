@@ -90,7 +90,7 @@ public class EditorForUpdate extends AppCompatActivity {
         imgPicture = (ImageView) findViewById(R.id.imageView2);
         if(data.moveToFirst())
         {
-            imgPicture.setImageBitmap(db.getBitmapFromEncodedString(data.getString(9)));
+            imgPicture.setImageBitmap(getBitmapFromEncodedString(data.getString(9)));
         }
 
         dateTimeView = (TextView) findViewById(R.id.textViewDate);
@@ -222,6 +222,7 @@ public class EditorForUpdate extends AppCompatActivity {
                     // Get bitmap from stream
                     Bitmap bitmapImage = BitmapFactory.decodeStream(inputStream);
                     // Show image to the user
+                    imgPicture.setImageBitmap(bitmapImage);
                     String imgPictureString = imageViewEncodeToString(imgPicture);
                     cntlr.setPhotograph(imgPictureString);
 
@@ -238,9 +239,16 @@ public class EditorForUpdate extends AppCompatActivity {
     {
         Bitmap bitmapImage2 = ((BitmapDrawable)image.getDrawable()).getBitmap();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmapImage2.compress(Bitmap.CompressFormat.PNG,50,stream);
+        bitmapImage2.compress(Bitmap.CompressFormat.JPEG,100,stream);
         byte[] byteArray = stream.toByteArray();
         return Base64.encodeToString(byteArray, Base64.URL_SAFE);
+    }
+
+    public Bitmap getBitmapFromEncodedString(String encodedString){
+
+        byte[] arrimg = Base64.decode(encodedString, Base64.URL_SAFE);
+        Bitmap img = BitmapFactory.decodeByteArray(arrimg, 0, arrimg.length);
+        return img;
     }
 
     public boolean servicesVersionCorrect()
