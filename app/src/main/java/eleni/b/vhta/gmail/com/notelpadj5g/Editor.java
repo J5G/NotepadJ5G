@@ -42,6 +42,7 @@ public class Editor extends AppCompatActivity  {
     private TextView dateTimeView;
     private static final String TAG ="Editor";
     private static final int ERROR_DIALOG_REQUEST=9001;
+    private Button Recorder;
     final Controller cntlr = new Controller();
     final Database db= new Database(this);
     boolean clicked = false;
@@ -71,6 +72,17 @@ public class Editor extends AppCompatActivity  {
         dateTimeView.setText(currentDate);
         String dateTime = DateUtils.formatDateTime(this, calendar.getTimeInMillis(), DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_NUMERIC_DATE | DateUtils.FORMAT_SHOW_TIME);
         cntlr.setDate(dateTime);
+
+
+        Recorder = findViewById(R.id.ButtonRecorder);
+        Recorder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Editor.this,Recorder.class);
+                startActivity(intent);
+            }
+        });
+
 
 
         ButtonSave.setOnClickListener(new View.OnClickListener() {
@@ -251,7 +263,7 @@ public class Editor extends AppCompatActivity  {
         builder.setNeutralButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                EditText editTitle = (EditText)saveView.findViewById(R.id.title);
+                EditText editTitle = saveView.findViewById(R.id.title);
                 String title = editTitle.getText().toString();
                 cntlr.setTitle(title);
                 if (clicked == false)
