@@ -63,7 +63,7 @@ public class Map extends AppCompatActivity implements OnMapReadyCallback {
         getLocationPermission();
     }
 
-    private void getLocationPermission()
+    public void getLocationPermission()
     {
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
 
