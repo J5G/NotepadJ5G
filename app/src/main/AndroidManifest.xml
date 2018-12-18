@@ -3,10 +3,12 @@
     package="eleni.b.vhta.gmail.com.notelpadj5g">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:allowBackup="true"
@@ -15,14 +17,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyB1rSYuvLLmyAedxRmpayAluVdbrzAZ09k"/>
+            android:value="AIzaSyB1rSYuvLLmyAedxRmpayAluVdbrzAZ09k" />
 
         <activity android:name=".View_Notes">
             <intent-filter>
@@ -32,9 +32,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".Editor" />
-        <activity android:name=".Map"></activity>
-        <activity android:name=".Notes_On_Map"></activity>
-        <activity android:name=".EditorForUpdate"></activity>
+        <activity android:name=".Map" />
+        <activity android:name=".Notes_On_Map" />
+        <activity android:name=".EditorForUpdate" />
+        <activity android:name=".Recorder" />
     </application>
 
 </manifest>
