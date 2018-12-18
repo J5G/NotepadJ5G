@@ -23,19 +23,23 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB1rSYuvLLmyAedxRmpayAluVdbrzAZ09k" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".View_Notes">
+        <activity android:name=".View_Notes" />
+        <activity android:name=".Editor" />
+        <activity android:name=".Map" />
+        <activity android:name=".Notes_On_Map" />
+        <activity android:name=".EditorForUpdate" />
+        <activity android:name=".Recorder" />
+        <activity android:name=".Welcome_Page">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Editor" />
-        <activity android:name=".Map" />
-        <activity android:name=".Notes_On_Map" />
-        <activity android:name=".EditorForUpdate" />
-        <activity android:name=".Recorder" />
     </application>
 
 </manifest>
