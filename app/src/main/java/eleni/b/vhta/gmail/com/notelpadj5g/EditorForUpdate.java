@@ -40,6 +40,7 @@ public class EditorForUpdate extends AppCompatActivity {
     private TextView dateTimeView;
     private static final String TAG ="Editor";
     private static final int ERROR_DIALOG_REQUEST=9001;
+    private Button Recorder;
     final Controller cntlr = new Controller();
     final Database db= new Database(this);
     int noteId = View_Notes.NOTE_ID;
@@ -86,17 +87,28 @@ public class EditorForUpdate extends AppCompatActivity {
         }
         //Giorgos end
 
-        imgPicture = (ImageView) findViewById(R.id.imageView2);
+        imgPicture = findViewById(R.id.imageView2);
         if(data.moveToFirst())
         {
             imgPicture.setImageBitmap(getBitmapFromEncodedString(data.getString(9)));
         }
 
-        dateTimeView = (TextView) findViewById(R.id.textViewDate);
+        dateTimeView = findViewById(R.id.textViewDate);
         if(data.moveToFirst()){
         dateTimeView.setText(data.getString(3));
         cntlr.setDate(data.getString(3));
         }
+
+        Recorder = findViewById(R.id.ButtonRecorder);
+        Recorder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EditorForUpdate.this,Recorder.class);
+                startActivity(intent);
+            }
+        });
+
+
 
 
         ButtonSave.setOnClickListener(new View.OnClickListener() {
