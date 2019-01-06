@@ -66,13 +66,13 @@ public class Editor extends AppCompatActivity  {
 
         imgPicture = findViewById(R.id.imageView2);
 
+
         dateTimeView = findViewById(R.id.textViewDate);
         Calendar calendar = Calendar.getInstance();
         String currentDate = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
         dateTimeView.setText(currentDate);
-        String dateTime = DateUtils.formatDateTime(this, calendar.getTimeInMillis(), DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_NUMERIC_DATE | DateUtils.FORMAT_SHOW_TIME);
-        cntlr.setDate(dateTime);
 
+        ReturnDate();
 
         Recorder = findViewById(R.id.ButtonRecorder);
         Recorder.setOnClickListener(new View.OnClickListener() {
@@ -167,7 +167,12 @@ public class Editor extends AppCompatActivity  {
         });
         }
 
-
+        public void ReturnDate()
+        {
+             Calendar calendar = Calendar.getInstance();
+             String dateTime = DateUtils.formatDateTime(this, calendar.getTimeInMillis(), DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_NUMERIC_DATE | DateUtils.FORMAT_SHOW_TIME);
+             cntlr.setDate(dateTime);
+        }
 
         public void onImageGalleryClick(View v)
         {
