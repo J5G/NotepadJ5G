@@ -4,6 +4,7 @@ import org.junit.Test;
 import android.content.Context;
 import static org.junit.Assert.*;
 
+//Giorgos
 public class GetNoteId_test
 {
     private Context context;
