@@ -16,7 +16,7 @@ public class Database extends SQLiteOpenHelper
 
     //database name
 
-    private static final String databaseName = "Notepad";
+    public static final String databaseName = "Notepad";
 
 
     public Database (Context context)
